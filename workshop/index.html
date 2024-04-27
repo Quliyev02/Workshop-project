@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+
+
+<title>Document</title>
+<style>
+pre {
+display: block;
+font-family: monospace;
+white-space: pre;
+margin: 1em 0;
+}
+</style>
+</head>
+
+
+<body>
+<h1>Google Generative AI</h1>
+<input type="text" id="from" placeholder="Starting point" />
+<input type="text" id="to" placeholder="Destination" />
+<input type="text" id="days" placeholder="Number of days" />
+<button id="generateBtn">Generate</button>
+<h3>Generated Content</h3>
+<div id="output"></div>
+<script type="importmap">
+{
+"imports": {
+"@google/generative-ai": "https://esm.run/@google/generative-ai"
+}
+}
+</script>
+
+
+<script type="module">
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+
+// Fetch your API_KEY
+const API_KEY = "keyyy";
+
+
+// Access your API key (see "Set up your API key" above)
+const genAI = new GoogleGenerativeAI(API_KEY);
+
+
+// ...
+async function run() {
+console.log('Calling');
+const fromDest = document.getElementById("from").value;
+const toDest = document.getElementById("to").value;
+const days = document.getElementById("days").value;
+// For text-only input, use the gemini-pro model
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest" });
+
+
+const prompt = `Create a travel itinerary from ${fromDest} to ${toDest} for ${days} days.`;
+
+
+const result = await model.generateContent(prompt);
+const response = await result.response;
+const text = response.text();
+var converter = new showdown.Converter();
+
+
+document.getElementById("output").innerHTML = converter.makeHtml(text);
+}
+
+
+// run();
+
+
+document.getElementById("generateBtn").addEventListener("click", run);
+
+
+// ...
+</script>
+</body>
+
+
+</html>
